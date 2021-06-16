@@ -16,7 +16,7 @@ export function debounce<F extends Procedure> (
     }
     const callNow = immediate && timeout === undefined
     if (timeout) clearTimeout(timeout)
-    timeout = setTimeout(doLater, waitMilliseconds)
+    timeout = setTimeout(doLater, waitMilliseconds) as any
     if (callNow) func.apply(self, args)
   } as any
 }

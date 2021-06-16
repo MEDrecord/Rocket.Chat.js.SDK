@@ -184,7 +184,7 @@ export class Socket extends EventEmitter {
     return Promise.resolve()
   }
 
-  checkAndReopen = () => !this.connected && this.reopen()
+  checkAndReopen = () => !this.connected ? this.reopen() : new Promise(() => {})
 
   /** Clear connection and try to connect again. */
   reopen = async () => {
@@ -248,7 +248,7 @@ export class Socket extends EventEmitter {
       this.once('disconnected', reject)
       const listener = (data.msg === 'ping' && 'pong') || (data.msg === 'connect' && 'connected') || data.id
       if (!listener) {
-        return resolve()
+        return resolve(true)
       }
       this.once(listener, (result: any) => {
         this.off('disconnect', reject)
@@ -403,7 +403,7 @@ export class Socket extends EventEmitter {
   }
 }
 
-export class DDPDriver extends EventEmitter implements ISocket, IDriver {
+export class DDPDriver extends EventEmitter implements Partial<ISocket>, IDriver {
   logger: ILogger
   config: ISocketOptions
 	/**
@@ -516,7 +516,7 @@ export class DDPDriver extends EventEmitter implements ISocket, IDriver {
 
   subscribe = (topic: string, eventname: string, ...args: any[]): Promise<ISubscription> => {
     this.logger.info(`[DDP driver] Subscribing to ${topic} | ${JSON.stringify(args)}`)
-    return this.ddp.subscribe(topic, [eventname, { 'useCollection': false, 'args': args }])
+    return this.ddp.subscribe(topic, [eventname, { 'useCollection': false, 'args': args }]) as any
   }
 
   subscribeNotifyAll = (): Promise< any> => {

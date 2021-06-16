@@ -12,7 +12,7 @@ import {
 	ISubscription
 } from '../../interfaces'
 
-export default class LivechatClient extends LivechatRest implements ISocket {
+export default class LivechatClient extends LivechatRest implements Partial<ISocket> {
   livechatStream: string = 'stream-livechat-room'
   userId: string = ''
   logger: ILogger = Logger

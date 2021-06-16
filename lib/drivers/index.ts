@@ -23,9 +23,9 @@ export interface ISocket {
 
   onStreamData (event: string, cb: ICallback): Promise<any>
 
-  on (event: string, listener: Function): EventEmitter
-  once (event: string, listener: Function): EventEmitter
-  off (event?: string, listener?: Function): EventEmitter
+  on (event: string, listener: Function): typeof EventEmitter
+  once (event: string, listener: Function): typeof EventEmitter
+  off (event?: string, listener?: Function): typeof EventEmitter
   emit (event: string, ...args: any[]): boolean
   listeners (event: string): Function[]
   removeAllListeners (event?: string): Function[]

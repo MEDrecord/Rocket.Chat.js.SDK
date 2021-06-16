@@ -65,7 +65,7 @@ export default class BotClient extends Rocketchat {
     }
   }
   async unsubscribeAll () {
-    delete this.messages
+    this.messages = null
     return super.unsubscribeAll()
   }
 /** Begin subscription to user's "global" message stream. Will only allow one. */
@@ -104,7 +104,7 @@ export default class BotClient extends Rocketchat {
       }
     }
     this.messages = await this.subscribeToMessages()
-    this.messages.onEvent(handler)
+    this.messages.onEvent && this.messages.onEvent(handler)
     // this.logger.info(`[driver] Added event handler for ${this.messages.name} subscription`)
   }
 /**

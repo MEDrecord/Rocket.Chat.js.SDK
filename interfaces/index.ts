@@ -898,5 +898,5 @@ export interface ILivechatCustomFieldsResultAPI {
 /** Structure for Livechat Upload api */
 export interface ILivechatUploadAPI {
   rid: string
-  file: File
+  file: any
 }
