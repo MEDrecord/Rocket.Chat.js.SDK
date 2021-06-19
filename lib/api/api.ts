@@ -106,9 +106,10 @@ class Client implements IClient {
   }
 
   getHeaders (options?: any) {
-    return options && options.customHeaders ?
-      options.customHeaders :
-      this.headers
+    return {
+      ...this.headers,
+      ...(options && options.customHeaders)
+    }
   }
 
   getBody (data: any) {
@@ -220,12 +221,16 @@ export default class Api extends EventEmitter {
     this.logger && this.logger.debug(`[API] ${ method } ${ endpoint }: ${ JSON.stringify(data) }`)
     try {
       if (auth && !this.loggedIn()) {
-        throw new Error('')
+        throw new Error('User should be authorized or RC Client haven\'t login creds')
       }
 
       const { signal } = this.controller;
-      options = { ...options, signal };
-
+      const authHeaders = auth ? {
+        'X-Auth-Token': this.currentLogin?.authToken,
+        'X-User-Id': this.currentLogin?.userId
+      } : {}
+      options = { customHeaders: authHeaders, ...options, signal };
+      
       let result
       switch (method) {
         case 'GET': result = await this.client.get(endpoint, data, options); break

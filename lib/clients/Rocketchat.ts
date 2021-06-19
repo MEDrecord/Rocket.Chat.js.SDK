@@ -24,7 +24,14 @@ export default class RocketChatClient extends ClientRest implements Partial<ISoc
   }
 
   async resume ({ token }: { token: string }) {
-    return (await this.socket as IDriver).login({ token } as any, {})
+    const authData = await (await this.socket as IDriver).login({ token } as any, {})
+    // @ts-ignore
+    this.currentLogin = {
+      ...this.currentLogin,
+      userId: authData.id,
+      authToken: authData.token
+    }
+    return authData
   }
 
   async login (credentials: ICredentials) {
