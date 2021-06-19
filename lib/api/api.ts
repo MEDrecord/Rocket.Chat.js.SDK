@@ -229,8 +229,15 @@ export default class Api extends EventEmitter {
         'X-Auth-Token': this.currentLogin?.authToken,
         'X-User-Id': this.currentLogin?.userId
       } : {}
-      options = { customHeaders: authHeaders, ...options, signal };
-      
+      options = {
+        ...options,
+        customHeaders: {
+          ...authHeaders,
+          ...options.customHeaders,
+        },
+        signal
+      };
+
       let result
       switch (method) {
         case 'GET': result = await this.client.get(endpoint, data, options); break
